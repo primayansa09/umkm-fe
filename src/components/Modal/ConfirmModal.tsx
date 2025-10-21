@@ -54,7 +54,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       aria-labelledby="confirm-dialog-title"
       BackdropProps={{
         sx: {
-          backgroundColor: "rgba(0, 0, 0, 0.2)", // transparan
+          backgroundColor: "rgba(111, 111, 111, 0.01)", // transparan
         },
       }}
       PaperProps={{

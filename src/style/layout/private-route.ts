@@ -26,13 +26,13 @@ const manageTableContainer: SxStyle = {
 
 const moduleTableHead: SxStyle = {
   "& th": {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FAFAFA",
     padding: "16px ",
   },
 };
 
 const manageTableRow: SxStyle = {
-  borderBottom: "1px solid black",
+  borderBottom: "1px solid ",
   "&:last-child td, &:last-child th": { border: 0 },
 };
 
@@ -59,7 +59,7 @@ const manageBoldTitle: SxStyle = {
 };
 
 const buttonAdd = {
-  background: "#DDA853",
+  background: "#F87B1B",
   fontSize: 12,
   width: 150,
   color: "white",
@@ -67,7 +67,7 @@ const buttonAdd = {
   padding: "10px",
   marginBottom: "10px",
   marginTop: "5px",
-  borderRadius: "5px",
+  borderRadius: "20px",
   cursor: "pointer",
 };
 
@@ -191,6 +191,10 @@ const backgroundColor: SxProps<Theme> = {
   color: '#FFFFFF'
 }
 
+const backgroundGeneral: SxProps<Theme> ={
+  color: '#EEEEEE'
+}
+
 const drawerIcon: SxProps<Theme> = {
   ccolor: "black", 
   width: "35px", 
@@ -199,6 +203,7 @@ const drawerIcon: SxProps<Theme> = {
 
 export const layoutPrivateStyle = {
   backgroundColor,
+  backgroundGeneral,
   buttonAdd,
   buttonCancel,
   buttonSubmit,

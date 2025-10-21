@@ -13,11 +13,14 @@ import {
   TableHead,
   TableRow,
   InputLabel,
-  TablePagination,
   Paper,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import InputAdornment from "@mui/material/InputAdornment";
+import Pagination from '@mui/material/Pagination';
 import { layoutPrivateStyle } from "../../../style/layout/private-route";
 import { Data, DataFilter } from "../../../store/store/type";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
@@ -114,59 +117,80 @@ export function DefaultDataStore() {
   }, [searchData, dataBind]);
 
   return (
-    <Stack sx={layoutPrivateStyle.fixHeader}>
-      <InputLabel
-        sx={{ ...layoutPrivateStyle.manageTitleHeader, marginTop: 5 }}
-      >
-        Data Toko
-      </InputLabel>
+    <Stack sx={{ ...layoutPrivateStyle.fixHeader, ...layoutPrivateStyle.backgroundGeneral }}>
+      <Grid container spacing={2}>
+        <Grid size={10}>
+          <InputLabel
+            sx={{ ...layoutPrivateStyle.manageTitleHeader, marginTop: 5 }}
+          >
+            Data Toko
+          </InputLabel>
+        </Grid>
+        <Grid size={2}>
+          <Button
+            variant="contained"
+            sx={{ ...layoutPrivateStyle.buttonAdd, marginTop: 5 }}
+            onClick={handleManageStore}
+          >
+            <AddIcon /> Tambah Toko
+          </Button>
+        </Grid>
+      </Grid>
       <Paper style={{ padding: 16 }}>
         <Grid container spacing={2} alignItems={"center"}>
-          <Grid size={8.8}>
-            <Button
-              variant="contained"
-              sx={layoutPrivateStyle.buttonAdd}
-              onClick={handleManageStore}
-            >
-              Tambah Data
-            </Button>
-          </Grid>
-          <Grid size={1}>
-            <InputLabel
-              sx={{
-                ...layoutPrivateStyle.manageSubTitle,
-                fontWeight: "bold",
-                marginLeft: "15px",
-              }}
-            >
-              Search :
-            </InputLabel>
-          </Grid>
           <Grid size={2}>
             <TextField
-              id="standard-basic"
-              label=""
-              variant="standard"
-              fullWidth
+              id="input-with-icon-textfield"
+              placeholder="Search Toko"
+              variant="outlined"
+              size="small"
               value={searchData}
               onChange={(e) => setSearchData(e.target.value)}
-              sx={{ marginBottom: "15px" }}
+              sx={{
+                backgroundColor: "#fff",
+                borderRadius: "8px",
+                borderColor: "#fff",
+                width: "100%",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none", // Hilangkan border
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  border: "none", // Tetap tanpa border saat hover
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  border: "none", // Tanpa border juga saat fokus
+                },
+                "& .MuiInputBase-input::placeholder": {
+                  color: "#bfbfbf",
+                  opacity: 1,
+                },
+              }}
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
           </Grid>
         </Grid>
         <TableContainer
           sx={layoutPrivateStyle.manageTableContainer}
-          style={{ marginTop: 10, backgroundColor: "#FFFFFF" }}
+          style={{ marginTop: 10 }}
         >
-          <Table sx={{ minWidth: 720 }} size="small" aria-label="a dense table">
+          <Table sx={{ minWidth: 720 }} size="small">
             <TableHead sx={layoutPrivateStyle.moduleTableHead}>
               <TableRow sx={layoutPrivateStyle.manageTableRow}>
                 <TableCell
                   sx={{
                     ...layoutPrivateStyle.manageTableCell,
-                    color: "black",
-                    fontWeight: "bold",
-                    textAlign: "center",
+                   fontWeight: "bold",
+                    color: "#333",
+                    fontSize: 13,
+                    borderBottom: "1px solid #E0E0E0",
                   }}
                 >
                   Toko
@@ -174,9 +198,10 @@ export function DefaultDataStore() {
                 <TableCell
                   sx={{
                     ...layoutPrivateStyle.manageTableCell,
-                    color: "black",
                     fontWeight: "bold",
-                    textAlign: "center",
+                    color: "#333",
+                    fontSize: 13,
+                    borderBottom: "1px solid #E0E0E0",
                   }}
                 >
                   Alamat
@@ -184,9 +209,10 @@ export function DefaultDataStore() {
                 <TableCell
                   sx={{
                     ...layoutPrivateStyle.manageTableCell,
-                    color: "black",
                     fontWeight: "bold",
-                    textAlign: "center",
+                    color: "#333",
+                    fontSize: 13,
+                    borderBottom: "1px solid #E0E0E0",
                   }}
                 >
                   Telepon
@@ -194,9 +220,10 @@ export function DefaultDataStore() {
                 <TableCell
                   sx={{
                     ...layoutPrivateStyle.manageTableCell,
-                    color: "black",
                     fontWeight: "bold",
-                    textAlign: "center",
+                    color: "#333",
+                    fontSize: 13,
+                    borderBottom: "1px solid #E0E0E0",
                   }}
                 >
                   Aksi
@@ -259,7 +286,7 @@ export function DefaultDataStore() {
                             marginBottom: "5px",
                           }}
                         >
-                          <EditIcon />
+                          <ModeEditOutlineOutlinedIcon />
                         </InputLabel>
                         <InputLabel
                           onClick={() => {
@@ -271,16 +298,16 @@ export function DefaultDataStore() {
                             cursor: "pointer",
                           }}
                         >
-                          <DeleteIcon />
+                          <DeleteOutlinedIcon />
                         </InputLabel>
                         <ConfirmModal
                           open={open}
                           onClose={() => setOpen(false)}
                           onConfirm={() => {
-                              if (selectedId) {
-                                handleDelete(selectedId);
-                              }
-                            }}
+                            if (selectedId) {
+                              handleDelete(selectedId);
+                            }
+                          }}
                           title="Hapus Data"
                           message={`Apakah Anda yakin ingin menghapus data ini ?`}
                         />
@@ -299,17 +326,8 @@ export function DefaultDataStore() {
             </TableBody>
           </Table>
         </TableContainer>
-        <Box display="flex" justifyContent="flex-start" mt={2}>
-          <TablePagination
-            component="div"
-            count={filteredData ? filteredData.length : 0}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            rowsPerPageOptions={[10, 25, 50]}
-            labelRowsPerPage="Showing"
-          />
+        <Box display="center" justifyContent="center" mt={2}>
+          <Pagination count={10} variant="outlined" shape="rounded" />
         </Box>
       </Paper>
     </Stack>

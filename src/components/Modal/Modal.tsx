@@ -42,7 +42,7 @@ const ModalAlert: React.FC<ModalAlertProps> = ({
       open={open}
       BackdropProps={{
         sx: {
-          backgroundColor: "rgba(0, 0, 0, 0.2)", // background transparan
+          backgroundColor: "rgba(111, 111, 111, 0.1)", // background transparan
         },
       }}
       PaperProps={{

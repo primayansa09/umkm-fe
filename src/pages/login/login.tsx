@@ -12,7 +12,6 @@ import { AppDispatch, RootState } from "../../store";
 import { login } from "../../store/auth";
 import LoginCard from "../../components/Login/LoginCard";
 import { layoutPrivateStyle } from "../../style/layout/private-route";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const loginSchema = z.object({
   email: z

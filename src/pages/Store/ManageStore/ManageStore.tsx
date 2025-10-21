@@ -13,6 +13,11 @@ import { layoutPrivateStyle } from "../../../style/layout/private-route";
 import { DataInsert } from "../../../store/store/type";
 import { createDataStore, updateData } from "../../../api/dataStore";
 import ModalAlert from "../../../components/Modal/Modal";
+import { z } from "zod";
+
+const storeSchema = z.object({
+  name: z.string().min(1, "Nama toko tidak boleh kosong"),
+});
 
 export function ManageStore() {
   const navigate = useNavigate();
@@ -34,11 +39,23 @@ export function ManageStore() {
   });
 
   const [errors, setErrors] = useState({
-    namaStore: false,
-    phone: false,
+    nameStore: false,
   });
 
   const handleSubmit = async () => {
+    setErrors({ nameStore: false});
+
+    const result = storeSchema.safeParse(formDataStore);
+
+    if(!result.success){
+      const fieldErrors: any = {};
+      result.error.errors.forEach((err) => {
+        if(err.path[0] === "name") fieldErrors.nameStore = true;
+      });
+      setErrors((prev) => ({ ...prev, ...fieldErrors }));
+      return;
+    }
+
     const dataJson = {
       name: formDataStore.name,
       address: formDataStore.address,
@@ -49,7 +66,6 @@ export function ManageStore() {
       if (dataEdit.mode === "Edit") {
         //MODE EDIT
         const response = await updateData(dataJson, dataEdit.id);
-        console.log("🟡 Respons dari API (Edit):", response);
 
         if (response.status === 200) {
           setModalTitle("Success");
@@ -65,7 +81,6 @@ export function ManageStore() {
       } else {
         //MODE CREATE
         const responseCreate = await createDataStore(dataJson);
-        console.log("🟢 Respons dari API (Create):", responseCreate);
 
         if (responseCreate.status === 201) {
           setModalTitle("Success");
@@ -124,6 +139,8 @@ export function ManageStore() {
               sx={{ width: "250px" }}
               size="small"
               value={formDataStore.name}
+              error={errors.nameStore}
+              helperText={errors.nameStore ? "Nama toko tidak boleh kosong" : ""}
               onChange={(e) =>
                 setFormDataStore({
                   ...formDataStore,
@@ -158,8 +175,8 @@ export function ManageStore() {
                   phone: e.target.value,
                 })
               }
-              error={errors.phone}
-              helperText={errors.phone ? "Nama toko wajib diisi" : ""}
+              // error={errors.phone}
+              // helperText={errors.phone ? "Nama toko wajib diisi" : ""}
             />
           </Grid>
         </Grid>
