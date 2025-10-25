@@ -42,6 +42,7 @@ export type DataInsert = {
     name: string | null;
     address: string | null;
     phone: string | null;
+    is_active: boolean;
 };
 
 export type ValidateError = {

@@ -2,7 +2,9 @@ import { SxProps, Theme } from "@mui/material";
 
 import { SxStyle } from "../../types/style";
 
-const sideMenuIcon: SxStyle = { fontSize: "18px", color: 'black' };
+const sideMenuIcon: SxStyle = { fontSize: "18px", color: "white" };
+
+const sideSubMenuIcon: SxStyle = { fontSize: "18px", color: "black" };
 
 const sideMenuIconCollapse: SxStyle = {
   fontSize: { xs: "14px", sm: "18px" },
@@ -19,14 +21,13 @@ const manageTitleHeader: SxStyle = {
 const manageTableContainer: SxStyle = {
   width: "100%",
   overflow: "hidden",
-  borderRadius: 2,
-  border: 1,
   color: "#D9D9D9",
+  marginBottom: 2.5,
 };
 
 const moduleTableHead: SxStyle = {
   "& th": {
-    backgroundColor: "#FAFAFA",
+    backgroundColor: "#f0f0f0a4",
     padding: "16px ",
   },
 };
@@ -36,14 +37,30 @@ const manageTableRow: SxStyle = {
   "&:last-child td, &:last-child th": { border: 0 },
 };
 
+const manageTableCellHeader: SxStyle = {
+  height: "20px",
+  padding: "10px",
+  fontWeight: "bold",
+  color: "#333",
+  fontSize: 13,
+  borderBottom: "1px solid #E0E0E0",
+  textAlign: "center",
+};
+
 const manageTableCell: SxStyle = {
   height: "20px",
   padding: "10px",
 };
 
 const manageTitleAction: SxStyle = {
-  color: "black",
-  fontSize: "13px",
+  color: "#555555ff",
+  fontSize: "8px",
+};
+
+const manageTableBodyNoBorder: SxStyle = {
+  border: 0.5,
+  borderLeft: 0,
+  borderRight: 0,
 };
 
 const manageColorTableHead: SxStyle = {
@@ -169,41 +186,67 @@ const headerAvatar: SxProps<Theme> = {
 };
 
 const footer: SxProps<Theme> = {
-  width: '80%',
-  height: '3%',
+  width: "100%",
+  height: "3%",
   // minHeight: '55px',
-  backgroundColor: 'white',
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
+  backgroundColor: "#fbfbfbfc",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
   alignItems: "center",
-  padding: '20px',
-  color: 'black',
+  padding: "20px",
+  color: "black",
   fontFamily: '"Open Sans",sans-serif !important',
 };
 
 const fixHeader: SxProps<Theme> = {
-  padding: 1,
-  marginTop: 5 
-}
+  marginTop: 5,
+  marginBottom: 3,
+  width: "100%",
+};
 
 const backgroundColor: SxProps<Theme> = {
-  color: '#FFFFFF'
-}
+  color: "#FFFFFF",
+};
 
-const backgroundGeneral: SxProps<Theme> ={
-  color: '#EEEEEE'
-}
+const backgroundGeneral: SxProps<Theme> = {
+  backgroundColor: "#fbfbfbfc",
+};
 
 const drawerIcon: SxProps<Theme> = {
-  ccolor: "black", 
-  width: "35px", 
-  height: "35px"
-}
+  color: "black",
+  width: "35px",
+  height: "35px",
+};
+
+const search: SxProps<Theme> = {
+  backgroundColor: "#fff",
+  borderRadius: "8px",
+  borderColor: "#fff",
+  width: "100%",
+  "& .MuiOutlinedInput-notchedOutline": {
+    border: "none",
+  },
+  "&:hover .MuiOutlinedInput-notchedOutline": {
+    border: "none",
+  },
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    border: "none",
+  },
+  "& .MuiInputBase-input::placeholder": {
+    color: "#bfbfbf",
+    opacity: 1,
+  },
+};
+
+const backgroundCard: SxProps<Theme> = {
+  borderRadius: 3,
+};
 
 export const layoutPrivateStyle = {
   backgroundColor,
   backgroundGeneral,
+  backgroundCard,
   buttonAdd,
   buttonCancel,
   buttonSubmit,
@@ -211,12 +254,15 @@ export const layoutPrivateStyle = {
   footer,
   fixHeader,
   sideMenuIcon,
+  sideSubMenuIcon,
   sideMenuIconCollapse,
   manageTitleHeader,
   manageTableContainer,
+  manageTableBodyNoBorder,
   moduleTableHead,
   manageTableRow,
   manageTableCell,
+  manageTableCellHeader,
   manageTitleAction,
   manageSubTitle,
   manageBoldTitle,
@@ -228,4 +274,5 @@ export const layoutPrivateStyle = {
   headerDivider,
   headerTypography,
   headerAvatar,
+  search,
 };

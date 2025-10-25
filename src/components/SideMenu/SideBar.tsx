@@ -142,7 +142,7 @@ const Sidebar: React.FC = () => {
         <AppBar
           position="fixed"
           open={open}
-          style={{ backgroundColor: "#FFFFFF" }}
+          style={{ backgroundColor: "#FFFFFF", boxShadow: "inherit" }}
         >
           <Toolbar>
             <IconButton
@@ -249,7 +249,7 @@ const Sidebar: React.FC = () => {
                       location.pathname.startsWith(item.link) &&
                       !item.collapseList
                         ? "#DDA853"
-                        : "inherit",
+                        : "#f0f0f0a4",
                   }}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
@@ -276,7 +276,7 @@ const Sidebar: React.FC = () => {
                             pl: 4,
                             backgroundColor:
                               location.pathname === subItem.link
-                                ? "#DDA853"
+                                ? "#f87b1bce"
                                 : "inherit",
                           }}
                           onClick={() => handleChildClick(subItem.link)}

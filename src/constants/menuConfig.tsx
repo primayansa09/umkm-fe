@@ -14,7 +14,7 @@ export interface ListItem {
 export const sidebarMenu: ListItem[] = [
   {
     name: "Master Data",
-    icon: <StorefrontIcon sx={layoutPrivateStyle.sideMenuIcon} />,
+    icon: <StorefrontIcon sx={layoutPrivateStyle.sideSubMenuIcon} />,
     link: "/master-data",
     key: "Master Data",
     collapseList: [

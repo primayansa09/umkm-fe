@@ -14,13 +14,14 @@ import {
   TableRow,
   InputLabel,
   Paper,
+  Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
-import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
-import Pagination from '@mui/material/Pagination';
+import Pagination from "@mui/material/Pagination";
 import { layoutPrivateStyle } from "../../../style/layout/private-route";
 import { Data, DataFilter } from "../../../store/store/type";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
@@ -117,16 +118,21 @@ export function DefaultDataStore() {
   }, [searchData, dataBind]);
 
   return (
-    <Stack sx={{ ...layoutPrivateStyle.fixHeader, ...layoutPrivateStyle.backgroundGeneral }}>
-      <Grid container spacing={2}>
-        <Grid size={10}>
+    <Stack
+      sx={{
+        ...layoutPrivateStyle.fixHeader,
+        ...layoutPrivateStyle.backgroundGeneral,
+      }}
+    >
+      <Grid container spacing={2} marginBottom={3}>
+        <Grid size={10.3}>
           <InputLabel
             sx={{ ...layoutPrivateStyle.manageTitleHeader, marginTop: 5 }}
           >
             Data Toko
           </InputLabel>
         </Grid>
-        <Grid size={2}>
+        <Grid size={1}>
           <Button
             variant="contained"
             sx={{ ...layoutPrivateStyle.buttonAdd, marginTop: 5 }}
@@ -136,8 +142,14 @@ export function DefaultDataStore() {
           </Button>
         </Grid>
       </Grid>
-      <Paper style={{ padding: 16 }}>
-        <Grid container spacing={2} alignItems={"center"}>
+      <Paper sx={layoutPrivateStyle.backgroundCard}>
+        <Grid
+          container
+          spacing={2}
+          alignItems={"center"}
+          marginTop={2}
+          marginBottom={1}
+        >
           <Grid size={2}>
             <TextField
               id="input-with-icon-textfield"
@@ -146,25 +158,7 @@ export function DefaultDataStore() {
               size="small"
               value={searchData}
               onChange={(e) => setSearchData(e.target.value)}
-              sx={{
-                backgroundColor: "#fff",
-                borderRadius: "8px",
-                borderColor: "#fff",
-                width: "100%",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "none", // Hilangkan border
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  border: "none", // Tetap tanpa border saat hover
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  border: "none", // Tanpa border juga saat fokus
-                },
-                "& .MuiInputBase-input::placeholder": {
-                  color: "#bfbfbf",
-                  opacity: 1,
-                },
-              }}
+              sx={layoutPrivateStyle.search}
               slotProps={{
                 input: {
                   startAdornment: (
@@ -177,60 +171,28 @@ export function DefaultDataStore() {
             />
           </Grid>
         </Grid>
-        <TableContainer
-          sx={layoutPrivateStyle.manageTableContainer}
-          style={{ marginTop: 10 }}
-        >
-          <Table sx={{ minWidth: 720 }} size="small">
+        <TableContainer sx={layoutPrivateStyle.manageTableContainer}>
+          <Table sx={{ minWidth: 720 }} size="small" aria-label="a dense table">
             <TableHead sx={layoutPrivateStyle.moduleTableHead}>
               <TableRow sx={layoutPrivateStyle.manageTableRow}>
-                <TableCell
-                  sx={{
-                    ...layoutPrivateStyle.manageTableCell,
-                   fontWeight: "bold",
-                    color: "#333",
-                    fontSize: 13,
-                    borderBottom: "1px solid #E0E0E0",
-                  }}
-                >
+                <TableCell sx={layoutPrivateStyle.manageTableCellHeader}>
                   Toko
                 </TableCell>
-                <TableCell
-                  sx={{
-                    ...layoutPrivateStyle.manageTableCell,
-                    fontWeight: "bold",
-                    color: "#333",
-                    fontSize: 13,
-                    borderBottom: "1px solid #E0E0E0",
-                  }}
-                >
+                <TableCell sx={layoutPrivateStyle.manageTableCellHeader}>
                   Alamat
                 </TableCell>
-                <TableCell
-                  sx={{
-                    ...layoutPrivateStyle.manageTableCell,
-                    fontWeight: "bold",
-                    color: "#333",
-                    fontSize: 13,
-                    borderBottom: "1px solid #E0E0E0",
-                  }}
-                >
+                <TableCell sx={layoutPrivateStyle.manageTableCellHeader}>
                   Telepon
                 </TableCell>
-                <TableCell
-                  sx={{
-                    ...layoutPrivateStyle.manageTableCell,
-                    fontWeight: "bold",
-                    color: "#333",
-                    fontSize: 13,
-                    borderBottom: "1px solid #E0E0E0",
-                  }}
-                >
+                <TableCell sx={layoutPrivateStyle.manageTableCellHeader}>
+                  Status
+                </TableCell>
+                <TableCell sx={layoutPrivateStyle.manageTableCellHeader}>
                   Aksi
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody sx={{ border: 1 }}>
+            <TableBody sx={layoutPrivateStyle.manageTableBodyNoBorder}>
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={8} align="center">
@@ -247,13 +209,17 @@ export function DefaultDataStore() {
                       },
                     }}
                   >
-                    <TableCell sx={layoutPrivateStyle.manageTableCell}>
+                    <TableCell
+                      sx={{
+                        ...layoutPrivateStyle.manageTableCell,
+                        textAlign: "center",
+                      }}
+                    >
                       {ex.name}
                     </TableCell>
                     <TableCell
                       sx={{
                         ...layoutPrivateStyle.manageTableCell,
-                        textAlign: "center",
                       }}
                     >
                       {ex.address}
@@ -265,6 +231,29 @@ export function DefaultDataStore() {
                       }}
                     >
                       {ex.phone}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        ...layoutPrivateStyle.manageTableCell,
+                        textAlign: "center",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          display: "inline-block",
+                          backgroundColor:
+                            ex.is_active
+                              ? "rgba(0, 128, 0, 0.1)"// merah muda transparan
+                              : "rgba(255, 0, 0, 0.1)", // hijau muda transparan
+                          color: ex.is_active ? "green" : "red",
+                          fontWeight: 500,
+                          borderRadius: "8px",
+                          padding: "4px 12px",
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        {ex.is_active ? "Aktif" : "Tidak Aktif"}
+                      </Typography>
                     </TableCell>
                     <TableCell
                       sx={{
@@ -303,11 +292,8 @@ export function DefaultDataStore() {
                         <ConfirmModal
                           open={open}
                           onClose={() => setOpen(false)}
-                          onConfirm={() => {
-                            if (selectedId) {
-                              handleDelete(selectedId);
-                            }
-                          }}
+                          onConfirm={handleDelete}
+                          targetId={selectedId ?? ""}
                           title="Hapus Data"
                           message={`Apakah Anda yakin ingin menghapus data ini ?`}
                         />
@@ -326,7 +312,7 @@ export function DefaultDataStore() {
             </TableBody>
           </Table>
         </TableContainer>
-        <Box display="center" justifyContent="center" mt={2}>
+        <Box display="center" justifyContent="center" marginBottom={2}>
           <Pagination count={10} variant="outlined" shape="rounded" />
         </Box>
       </Paper>

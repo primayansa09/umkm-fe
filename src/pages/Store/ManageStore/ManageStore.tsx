@@ -8,34 +8,41 @@ import {
   TextField,
   InputLabel,
   Paper,
+  Switch,
 } from "@mui/material";
 import { layoutPrivateStyle } from "../../../style/layout/private-route";
 import { DataInsert } from "../../../store/store/type";
 import { createDataStore, updateData } from "../../../api/dataStore";
 import ModalAlert from "../../../components/Modal/Modal";
 import { z } from "zod";
+import { alpha, styled } from "@mui/material/styles";
+import { pink } from "@mui/material/colors";
 
 const storeSchema = z.object({
   name: z.string().min(1, "Nama toko tidak boleh kosong"),
 });
 
+const label = { inputProps: { "aria-label": "Color switch demo" } };
+
 export function ManageStore() {
   const navigate = useNavigate();
-  const [dataEdit, setDataEdit] = useState<{ id: string; mode: string }>({
-    id: "",
-    mode: "",
-  });
-
   const location = useLocation();
   const { itemData, mode, IsEdit } = location.state || {};
+
+  const [dataEdit, setDataEdit] = useState<{ id: string; mode: string }>({
+    id: itemData?.id || "",
+    mode: mode || "",
+  });
+
   const [openModal, setOpenModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
-  const [modalContent, setModalContent] = useState<React.ReactNode>("");
+  const [modalContent, setModalContent] = useState("");
 
   const [formDataStore, setFormDataStore] = useState<DataInsert>({
     name: "",
     address: "",
     phone: "",
+    is_active: false,
   });
 
   const [errors, setErrors] = useState({
@@ -43,14 +50,14 @@ export function ManageStore() {
   });
 
   const handleSubmit = async () => {
-    setErrors({ nameStore: false});
+    setErrors({ nameStore: false });
 
     const result = storeSchema.safeParse(formDataStore);
 
-    if(!result.success){
+    if (!result.success) {
       const fieldErrors: any = {};
       result.error.errors.forEach((err) => {
-        if(err.path[0] === "name") fieldErrors.nameStore = true;
+        if (err.path[0] === "name") fieldErrors.nameStore = true;
       });
       setErrors((prev) => ({ ...prev, ...fieldErrors }));
       return;
@@ -69,7 +76,7 @@ export function ManageStore() {
 
         if (response.status === 200) {
           setModalTitle("Success");
-          setModalContent(response.message || "Data successfully updated!");
+          setModalContent(response.message || "Data toko berhasil diperbarui");
         } else {
           setModalTitle("FAILED !!!");
           setModalContent(
@@ -85,7 +92,7 @@ export function ManageStore() {
         if (responseCreate.status === 201) {
           setModalTitle("Success");
           setModalContent(
-            responseCreate.message || "Data successfully created!"
+            responseCreate.message || "Data toko berhasil dibuat"
           );
         } else {
           setModalTitle("FAILED !!!");
@@ -106,8 +113,12 @@ export function ManageStore() {
   useEffect(() => {
     if (IsEdit && itemData) {
       setFormDataStore(itemData);
+      setDataEdit({
+        id: itemData.id,
+        mode: mode || "Edit",
+      });
     }
-  }, [IsEdit, itemData]);
+  }, [IsEdit, itemData, mode]);
 
   const clickCancel = () => {
     navigate("/master-data/data-store", { replace: true });
@@ -121,7 +132,7 @@ export function ManageStore() {
         Master Data Store
       </InputLabel>
       <Paper style={{ padding: 16 }}>
-        <Grid container spacing={2} alignItems={"center"} marginTop={5}>
+        <Grid container spacing={2} alignItems={"center"} marginTop={2}>
           <Grid size={2}>
             <InputLabel
               sx={{
@@ -132,7 +143,7 @@ export function ManageStore() {
               Nama Toko
             </InputLabel>
           </Grid>
-          <Grid size={4}>
+          <Grid size={9}>
             <TextField
               id="outlined-basic"
               variant="outlined"
@@ -140,11 +151,35 @@ export function ManageStore() {
               size="small"
               value={formDataStore.name}
               error={errors.nameStore}
-              helperText={errors.nameStore ? "Nama toko tidak boleh kosong" : ""}
+              helperText={
+                errors.nameStore ? "Nama toko tidak boleh kosong" : ""
+              }
               onChange={(e) =>
                 setFormDataStore({
                   ...formDataStore,
                   name: e.target.value,
+                })
+              }
+            />
+          </Grid>
+          <Grid size={1}>
+            <InputLabel
+              sx={{
+                ...layoutPrivateStyle.manageSubTitle,
+                marginLeft: "9px",
+              }}
+            >
+              Status
+            </InputLabel>
+            <Switch
+              {...label}
+              defaultChecked
+              color="warning"
+              checked={formDataStore.is_active}
+              onChange={(e) =>
+                setFormDataStore({
+                  ...formDataStore,
+                  is_active: e.target.checked,
                 })
               }
             />
@@ -175,8 +210,6 @@ export function ManageStore() {
                   phone: e.target.value,
                 })
               }
-              // error={errors.phone}
-              // helperText={errors.phone ? "Nama toko wajib diisi" : ""}
             />
           </Grid>
         </Grid>
@@ -250,7 +283,7 @@ export function ManageStore() {
             if (modalTitle === "Success") navigate("/master-data/data-store");
           }}
           title="Success"
-          message={`Berhasil menambahkan data toko`}
+          message={modalContent}
         />
       </Paper>
     </Stack>

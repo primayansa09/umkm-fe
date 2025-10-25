@@ -18,7 +18,17 @@ function App() {
   const isLoginPage = location.pathname === "/login";
 
   return (
-    <div>
+    <div
+      style={{
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh",
+    margin: 0,
+    padding: 0,
+    width: "100%",
+    overflowX: "hidden",
+  }}
+    >
       {isLoginPage ? (
         // Full page khusus login (tanpa sidebar & navbar)
         <Routes>
@@ -29,10 +39,10 @@ function App() {
         // Layout utama untuk halaman lain
         <div style={{ display: "flex" }}>
           <Sidebar />
-          <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+          <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: "100vh", width: "100%", }}>
             {/* <AppNavBar /> */}
          
-            <main style={{ padding: 20, flex: 1, overflowY: "auto" }}>
+            <main style={{ padding: 20, flex: 1, overflowY: "auto", backgroundColor: "#fbfbfbfc", }}>
               <Routes>
                 <Route path="/" element={<Navigate to="/login" replace />} />
                 <Route

@@ -31,7 +31,7 @@ export const updateData = (
   id: string
 ): Promise<DataResponseCreate> =>
   apiClient
-    .post<DataResponseCreate, any>(`${storeAPI.updateData}/${id}`, data, {
+    .put<DataResponseCreate, any>(`${storeAPI.updateData}/${id}`, data, {
       headers: {
         "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
       },
