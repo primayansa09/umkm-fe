@@ -28,8 +28,9 @@ import { layoutPrivateStyle } from "../../style/layout/private-route";
 import logo from "../../assets/Logo_UMKM.png";
 import Avatar from "@mui/material/Avatar";
 import { Menu } from "@mui/material";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import React from "react";
 
 const drawerWidth = 240;
 const settings = ["Logout"];
@@ -99,7 +100,7 @@ const Sidebar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [profileMenu, setProfileMenu] = useState(false);
-  const userName = useSelector((state: RootState) => state.auth.user?.name)
+  const userName = useSelector((state: RootState) => state.auth.user?.name);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setProfileMenu(true);
@@ -152,7 +153,10 @@ const Sidebar: React.FC = () => {
               edge="start"
               sx={[
                 {
-                  mr: 2, width: "25px", height: "25px", color: 'black'
+                  mr: 2,
+                  width: "25px",
+                  height: "25px",
+                  color: "black",
                 },
                 open && { display: "none" },
               ]}
@@ -177,7 +181,9 @@ const Sidebar: React.FC = () => {
             </Box>
             <Box sx={{ flexGrow: 1 }} />
             <Stack direction="row" alignItems="center" gap="16px">
-              <Typography sx={layoutPrivateStyle.headerTypography}>Welcome, {userName || ""}</Typography>
+              <Typography sx={layoutPrivateStyle.headerTypography}>
+                Welcome, {userName || ""}
+              </Typography>
               <Avatar
                 src="/static/images/avatar/2.jpg"
                 sx={layoutPrivateStyle.headerAvatar}
@@ -232,64 +238,122 @@ const Sidebar: React.FC = () => {
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === "ltr" ? (
-                <ChevronLeftIcon sx={layoutPrivateStyle.drawerIcon}/>
+                <ChevronLeftIcon sx={layoutPrivateStyle.drawerIcon} />
               ) : (
-                <ChevronRightIcon sx={layoutPrivateStyle.drawerIcon}/>
+                <ChevronRightIcon sx={layoutPrivateStyle.drawerIcon} />
               )}
             </IconButton>
           </DrawerHeader>
           <Divider />
           <List>
-            {sidebarMenu.map((item) => (
-              <Stack key={item.key}>
-                <ListItemButton
-                  onClick={() => handleParentClick(item)}
-                  sx={{
-                    backgroundColor:
-                      location.pathname.startsWith(item.link) &&
-                      !item.collapseList
-                        ? "#DDA853"
-                        : "#f0f0f0a4",
-                  }}
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.name} sx={{ color: "black" }} />
-                  {item.collapseList ? (
-                    openCollapse === item.name ? (
-                      <ExpandLess sx={layoutPrivateStyle.drawerIcon} />
-                    ) : (
-                      <ExpandMore sx={layoutPrivateStyle.drawerIcon} />
-                    )
-                  ) : null}
-                </ListItemButton>
-                {item.collapseList && (
-                  <Collapse
-                    in={openCollapse === item.name}
-                    timeout="auto"
-                    unmountOnExit
+            {sidebarMenu.map((item) => {
+              const isParentActive = location.pathname.startsWith(item.link);
+              return (
+                <React.Fragment key={item.key}>
+                  {/* Parent menu */}
+                  <ListItemButton
+                    onClick={() =>
+                      item.collapseList
+                        ? handleParentClick(item)
+                        : handleChildClick(item.link)
+                    }
+                    sx={{
+                      borderRadius: "10px",
+                      mb: 0.5,
+                      backgroundColor: isParentActive
+                        ? "rgba(210, 145, 25, 0.08)"
+                        : "transparent",
+                      "&:hover": {
+                        backgroundColor: "rgba(0, 0, 0, 0.05)",
+                      },
+                    }}
                   >
-                    <List component="div" disablePadding>
-                      {item.collapseList.map((subItem) => (
-                        <ListItemButton
-                          key={subItem.key}
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 36,
+                        color: isParentActive ? "#FEA405" : "#333",
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <Typography
                           sx={{
-                            pl: 4,
-                            backgroundColor:
-                              location.pathname === subItem.link
-                                ? "#f87b1bce"
-                                : "inherit",
+                            fontWeight: isParentActive ? 600 : 600,
+                            color: isParentActive ? "#FEA405" : "#333",
+                            fontSize: "14px",
                           }}
-                          onClick={() => handleChildClick(subItem.link)}
                         >
-                          <ListItemIcon>{subItem.icon}</ListItemIcon>
-                          <ListItemText primary={subItem.name} sx={{ color: "white" }} />
-                        </ListItemButton>
+                          {item.name}
+                        </Typography>
+                      }
+                    />
+                    {item.collapseList &&
+                      (openCollapse === item.name ? (
+                        <ExpandLess sx={{ color: "#FEA405" }} />
+                      ) : (
+                        <ExpandMore sx={{ color: "#33333386" }} />
                       ))}
-                    </List>
-                  </Collapse>
-                )}
-              </Stack>
-            ))}
+                  </ListItemButton>
+
+                  {/* Submenu */}
+                  {item.collapseList && (
+                    <Collapse
+                      in={openCollapse === item.name}
+                      timeout="auto"
+                      unmountOnExit
+                    >
+                      <List component="div" disablePadding>
+                        {item.collapseList.map((subItem) => {
+                          const isSubActive =
+                            location.pathname === subItem.link;
+                          return (
+                            <ListItemButton
+                              key={subItem.key}
+                              onClick={() => handleChildClick(subItem.link)}
+                              sx={{
+                                pl: 5,
+                                borderRadius: "10px",
+                                mb: 0.5,
+                                backgroundColor: isSubActive
+                                  ? "rgba(210, 145, 25, 0.08)"
+                                  : "transparent",
+                                "&:hover": {
+                                  backgroundColor: "rgba(0, 0, 0, 0.05)",
+                                },
+                              }}
+                            >
+                              <ListItemIcon
+                                sx={{
+                                  minWidth: 32,
+                                  color: isSubActive ? "#FEA405" : "#555",
+                                }}
+                              >
+                                {subItem.icon}
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={
+                                  <Typography
+                                    sx={{
+                                      fontWeight: isSubActive ? 600 : 600,
+                                      color: isSubActive ? "#FEA405" : "#333",
+                                      fontSize: "13px",
+                                    }}
+                                  >
+                                    {subItem.name}
+                                  </Typography>
+                                }
+                              />
+                            </ListItemButton>
+                          );
+                        })}
+                      </List>
+                    </Collapse>
+                  )}
+                </React.Fragment>
+              );
+            })}
           </List>
         </Drawer>
         <Main open={open}>

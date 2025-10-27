@@ -1,0 +1,1 @@
+export { DefaultDataUser } from './DefaultDataUser';

@@ -11,20 +11,16 @@ import {
   Switch,
 } from "@mui/material";
 import { layoutPrivateStyle } from "../../../style/layout/private-route";
-import { DataInsert } from "../../../store/store/type";
-import { createDataStore, updateData } from "../../../api/dataStore";
+import { DataInsert } from "../../../store/users/type";
+import { createDataUser, updateDataUser } from "../../../api/dataUsers";
 import ModalAlert from "../../../components/Modal/Modal";
 import { z } from "zod";
-import { alpha, styled } from "@mui/material/styles";
-import { pink } from "@mui/material/colors";
 
 const storeSchema = z.object({
   name: z.string().min(1, "Nama toko tidak boleh kosong"),
 });
 
-const label = { inputProps: { "aria-label": "Color switch demo" } };
-
-export function ManageStore() {
+export function ManageUser() {
   const navigate = useNavigate();
   const location = useLocation();
   const { itemData, mode, IsEdit } = location.state || {};
@@ -38,11 +34,12 @@ export function ManageStore() {
   const [modalTitle, setModalTitle] = useState("");
   const [modalContent, setModalContent] = useState("");
 
-  const [formDataStore, setFormDataStore] = useState<DataInsert>({
+  const [formDataUser, setFormDataUser] = useState<DataInsert>({
     name: "",
+    email: "",
     address: "",
     phone: "",
-    is_active: false,
+    password: "",
   });
 
   const [errors, setErrors] = useState({
@@ -53,7 +50,7 @@ export function ManageStore() {
   const handleSubmit = async () => {
     setErrors({ nameStore: false, phone: false });
 
-    const result = storeSchema.safeParse(formDataStore);
+    const result = storeSchema.safeParse(formDataUser);
 
     if (!result.success) {
       const fieldErrors: any = {};
@@ -65,19 +62,20 @@ export function ManageStore() {
     }
 
     const dataJson = {
-      name: formDataStore.name,
-      address: formDataStore.address,
-      Phone: formDataStore.phone,
+      name: formDataUser.name,
+      email: formDataUser.email,
+      address: formDataUser.address,
+      Phone: formDataUser.phone,
     };
 
     try {
       if (dataEdit.mode === "Edit") {
         //MODE EDIT
-        const response = await updateData(dataJson, dataEdit.id);
+        const response = await updateDataUser(dataJson, dataEdit.id);
 
         if (response.status === 200) {
           setModalTitle("Success");
-          setModalContent(response.message || "Data toko berhasil diperbarui");
+          setModalContent(response.message || "Data user berhasil diperbarui");
         } else {
           setModalTitle("FAILED !!!");
           setModalContent(
@@ -88,12 +86,12 @@ export function ManageStore() {
         setOpenModal(true);
       } else {
         //MODE CREATE
-        const responseCreate = await createDataStore(dataJson);
+        const responseCreate = await createDataUser(dataJson);
 
         if (responseCreate.status === 201) {
           setModalTitle("Success");
           setModalContent(
-            responseCreate.message || "Data toko berhasil dibuat"
+            responseCreate.message || "Data user berhasil dibuat"
           );
         } else {
           setModalTitle("FAILED !!!");
@@ -113,7 +111,7 @@ export function ManageStore() {
 
   useEffect(() => {
     if (IsEdit && itemData) {
-      setFormDataStore(itemData);
+      setFormDataUser(itemData);
       setDataEdit({
         id: itemData.id,
         mode: mode || "Edit",
@@ -122,7 +120,7 @@ export function ManageStore() {
   }, [IsEdit, itemData, mode]);
 
   const clickCancel = () => {
-    navigate("/master-data/data-store", { replace: true });
+    navigate("/master-data/data-user", { replace: true });
   };
 
   return (
@@ -130,84 +128,84 @@ export function ManageStore() {
       <InputLabel
         sx={{ ...layoutPrivateStyle.manageTitleHeader, marginTop: 5 }}
       >
-        Master Data Store
+        Data User
       </InputLabel>
       <Paper style={{ padding: 16 }}>
-        <Grid container spacing={2} alignItems={"center"} marginTop={2}>
-          <Grid size={2}>
-            <InputLabel
-              sx={{
-                ...layoutPrivateStyle.manageSubTitle,
-                marginLeft: "15px",
-              }}
-            >
-              Nama Toko
-            </InputLabel>
-          </Grid>
-          <Grid size={9}>
+        <Grid
+          container
+          style={{ marginTop: "5px" }}
+          justifyContent="space-between"
+        >
+          <Grid direction="column" container size={5.9}>
+            <Grid>
+              <InputLabel
+                sx={{
+                  ...layoutPrivateStyle.manageSubTitle,
+                }}
+              >
+                Nama
+                <span style={{ color: "red" }}>*</span>
+              </InputLabel>
+            </Grid>
             <TextField
               id="outlined-basic"
               variant="outlined"
-              sx={{ width: "250px" }}
               size="small"
-              value={formDataStore.name}
+              value={formDataUser.name}
               error={errors.nameStore}
               helperText={
                 errors.nameStore ? "Nama toko tidak boleh kosong" : ""
               }
               onChange={(e) =>
-                setFormDataStore({
-                  ...formDataStore,
+                setFormDataUser({
+                  ...formDataUser,
                   name: e.target.value,
                 })
               }
             />
           </Grid>
-          <Grid size={1}>
-            <InputLabel
-              sx={{
-                ...layoutPrivateStyle.manageSubTitle,
-                marginLeft: "9px",
-              }}
-            >
-              Status
-            </InputLabel>
-            <Switch
-              {...label}
-              defaultChecked
-              color="warning"
-              checked={formDataStore.is_active}
+          <Grid direction="column" container size={6}>
+            <Grid>
+              <InputLabel
+                sx={{
+                  ...layoutPrivateStyle.manageSubTitle,
+                }}
+              >
+                Email
+                <span style={{ color: "red" }}>*</span>
+              </InputLabel>
+            </Grid>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              size="small"
+              value={formDataUser.email}
               onChange={(e) =>
-                setFormDataStore({
-                  ...formDataStore,
-                  is_active: e.target.checked,
+                setFormDataUser({
+                  ...formDataUser,
+                  email: e.target.value,
                 })
               }
             />
           </Grid>
-        </Grid>
-        <Grid container spacing={2} alignItems={"center"} marginTop={2}>
-          <Grid size={2}>
-            <InputLabel
-              sx={{
-                ...layoutPrivateStyle.manageSubTitle,
-                marginLeft: "15px",
-              }}
-            >
-              No Tlp/Handphone
-              {/* <span style={{ color: "red" }}>*</span> */}
-            </InputLabel>
-          </Grid>
-          <Grid size={4}>
+          <Grid direction="column" container size={5.9}>
+            <Grid>
+              <InputLabel
+                sx={{
+                  ...layoutPrivateStyle.manageSubTitle,
+                  marginTop: 1,
+                }}
+              >
+                No Tlp/Handphone
+                <span style={{ color: "red" }}>*</span>
+              </InputLabel>
+            </Grid>
             <TextField
               id="outlined-basic"
               variant="outlined"
-              sx={{ width: "250px" }}
               size="small"
-              value={formDataStore.phone}
-              helperText={
-                errors.phone ? "Nomor HP harus 10–13 digit" : ""
-              }
+              value={formDataUser.phone}
+              helperText={errors.phone ? "Nomor HP harus 10–13 digit" : ""}
               FormHelperTextProps={{
                 sx: { color: "red" },
               }}
@@ -218,8 +216,8 @@ export function ManageStore() {
                 if (/^\d*$/.test(value)) {
                   // Batasi maksimal 13 digit
                   if (value.length <= 13) {
-                    setFormDataStore({
-                      ...formDataStore,
+                    setFormDataUser({
+                      ...formDataUser,
                       phone: value,
                     });
 
@@ -232,41 +230,6 @@ export function ManageStore() {
                   }
                 }
               }}
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={2} alignItems={"center"} marginTop={2}>
-          <Grid size={2}>
-            <InputLabel
-              sx={{
-                ...layoutPrivateStyle.manageSubTitle,
-                marginLeft: "15px",
-              }}
-            >
-              Alamat Toko
-            </InputLabel>
-          </Grid>
-          <Grid size={4}>
-            <TextField
-              id="outlined-basic"
-              variant="outlined"
-              sx={{ width: "600px" }}
-              multiline
-              rows={10}
-              InputProps={{
-                sx: {
-                  height: 200,
-                  padding: "0 8px",
-                  alignItems: "flex-start",
-                },
-              }}
-              value={formDataStore.address}
-              onChange={(e) =>
-                setFormDataStore({
-                  ...formDataStore,
-                  address: e.target.value,
-                })
-              }
             />
           </Grid>
         </Grid>

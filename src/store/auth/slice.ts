@@ -16,7 +16,13 @@ const parsedUser = storedUser ? JSON.parse(storedUser) : null;
 const initialState: AuthState = {
   token: parsedUser?.token || null,
   user: parsedUser
-    ? { name: parsedUser.name, email: parsedUser.email, id: parsedUser.id, role: parsedUser.role, is_active: true }
+    ? {
+        name: parsedUser.name,
+        email: parsedUser.email,
+        id: parsedUser.id,
+        role: parsedUser.role,
+        is_active: true,
+      }
     : null,
   loading: false,
   error: null,
@@ -25,9 +31,15 @@ const initialState: AuthState = {
 // thunk untuk login
 export const login = createAsyncThunk(
   "auth/loginUser",
-  async ({ email, password }: { email: string; password: string }, thunkAPI) => {
+  async (
+    { email, password }: { email: string; password: string },
+    thunkAPI
+  ) => {
     try {
-      const response = await apiClient.post(loginAPI.login, { email, password });
+      const response = await apiClient.post(loginAPI.login, {
+        email,
+        password,
+      });
       return response.data; // { data: { token, user }, message, status }
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data || "Login failed");
@@ -53,8 +65,8 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload.token;
-        state.user = action.payload.user;
+        state.token = action.payload.data.token;
+        state.user = action.payload.data.user;
 
         localStorage.setItem(
           "userData",
@@ -73,4 +85,3 @@ const authSlice = createSlice({
 
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;
-

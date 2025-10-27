@@ -10,7 +10,11 @@ import {
   Navigate,
 } from "react-router-dom";
 import { DataStore } from "./pages/Store/DataStore";
+import {DataUsers} from './pages/User/DataUser';
+import { DataServiceItem } from "./pages/ServiceItem/ServiceItem";
 import { ManageStore } from "./pages/Store/ManageStore";
+import { ManageUser } from "./pages/User/ManageUser";
+import { ManageServiceItem } from "./pages/ServiceItem/ManageServiceItem";
 import { Login } from "./pages/login/login";
 
 function App() {
@@ -50,6 +54,10 @@ function App() {
                   element={<DataStore />}
                 />
                 <Route path="manage-store" element={<ManageStore />} />
+                <Route path="/master-data/data-user" element={<DataUsers />} />
+                <Route path="manage-user" element={<ManageUser />} />
+                <Route path="/service-item" element={<DataServiceItem />}/>
+                <Route path="manage-service-item" element={<ManageServiceItem />}/>
               </Routes>
             </main>
            <FooterPublicRoutes />

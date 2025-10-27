@@ -13,13 +13,13 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import Pagination from "@mui/material/Pagination";
 import { layoutPrivateStyle } from "../../../style/layout/private-route";
-import { Data } from "../../../store/store/type";
+import { Data } from "../../../store/serviceItem/type";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
-import { getDataStore, deleteData } from "../../../api/dataStore";
+import { getDataUser, deleteDataUser } from "../../../api/dataServiceItem";
 import TableComponent from "../../../components/Table/TableComponent";
 import SearchField from "../../../components/SearchComponent/SearchComponent";
 
-export function DefaultDataStore() {
+export function DefaultServiceItem() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -34,19 +34,10 @@ export function DefaultDataStore() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      //    const filter: DataFilter = {
-      //   filter: {
-      //     name: searchData || "",
-      //   },
-      //   sortBy: null,
-      //   order: null,
-      //   pageSize: rowsPerPage,
-      //   pageNumber: page + 1,
-      // };
 
-      const response = await getDataStore();
+      const response = await getDataUser();
       setDataBind(response.data || []);
-      // setFilteredData(response.data || []);
+      console.log("data", response.data);
       await new Promise((resolve) => setTimeout(resolve, 500));
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -73,12 +64,12 @@ export function DefaultDataStore() {
     setPage(0);
   };
 
-  const handleManageStore = () => {
-    navigate("/manage-store", { replace: true });
+  const handleManageServiceItem = () => {
+    navigate("/manage-service-item", { replace: true });
   };
 
   const clickEditData = (item: Data) => {
-    navigate("/manage-store", {
+    navigate("/manage-service-item", {
       state: {
         itemData: item,
         mode: "Edit",
@@ -92,17 +83,17 @@ export function DefaultDataStore() {
     setOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      const response = await deleteData(id);
-      console.log("Data berhasil dihapus:", response);
+    const handleDelete = async (id: string) => {
+      try {
+        const response = await deleteDataUser(id);
+        console.log("Data berhasil dihapus:", response);
 
-      setOpen(false);
-      fetchData();
-    } catch (error) {
-      console.error("Gagal menghapus data:", error);
-    }
-  };
+        setOpen(false);
+        fetchData();
+      } catch (error) {
+        console.error("Gagal menghapus data:", error);
+      }
+    };
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -122,32 +113,10 @@ export function DefaultDataStore() {
   }, [searchData, dataBind]);
 
   const TableColumn = [
-    { field: "name", headerName: "Toko", align: "center" as const },
-    { field: "address", headerName: "Alamat", align: "center" as const },
-    { field: "phone", headerName: "Telepon", align: "center" as const },
-    {
-      field: "is_active",
-      headerName: "Status",
-      align: "center" as const,
-      render: (row: any) => (
-        <Typography
-          sx={{
-            backgroundColor: row.is_active
-              ? "rgba(0, 128, 0, 0.1)"
-              : "rgba(255, 0, 0, 0.1)",
-            color: row.is_active ? "green" : "red",
-            borderRadius: "8px",
-            px: 1,
-            py: 0.5,
-            padding: "4px 12px",
-            fontSize: "0.9rem",
-            display: "inline-block",
-          }}
-        >
-          {row.is_active ? "Aktif" : "Tidak Aktif"}
-        </Typography>
-      ),
-    },
+    { field: "name", headerName: "Nama Item", align: "center" as const },
+    { field: "Description", headerName: "Description", align: "center" as const },
+    { field: "Price", headerName: "Harga", align: "center" as const },
+    { field: "Unit", headerName: "Type", align: "center" as const },
   ];
 
   return (
@@ -162,16 +131,16 @@ export function DefaultDataStore() {
           <InputLabel
             sx={{ ...layoutPrivateStyle.manageTitleHeader, marginTop: 5 }}
           >
-            Data Toko
+            Data Service Item
           </InputLabel>
         </Grid>
         <Grid size={1}>
           <Button
             variant="contained"
             sx={{ ...layoutPrivateStyle.buttonAdd, marginTop: 5 }}
-            onClick={handleManageStore}
+            onClick={handleManageServiceItem}
           >
-            <AddIcon /> Tambah Toko
+            <AddIcon /> Tambah Item
           </Button>
         </Grid>
       </Grid>
@@ -184,9 +153,9 @@ export function DefaultDataStore() {
           marginBottom={1}
         >
           <SearchField
+            placeholder="Search service item"
             value={searchData}
             onChange={(value) => setSearchData(value)}
-            placeholder="Search toko"
             sx={layoutPrivateStyle.search}
           />
         </Grid>
@@ -216,7 +185,7 @@ export function DefaultDataStore() {
           title="Hapus Data"
           message={`Apakah Anda yakin ingin menghapus data ini ?`}
         />
-        <Box display="center" justifyContent="center" marginBottom={2}>
+        <Box display="center" justifyContent="center" marginBottom={2} marginTop={2}>
           <Pagination count={10} variant="outlined" shape="rounded" />
         </Box>
       </Paper>

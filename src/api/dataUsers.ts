@@ -3,19 +3,19 @@ import {
   DataResponse,
   DataResponseCreate,
   DataResponseById,
-} from "../store/store/type";
-import { storeAPI } from "../constants/storeApi";
+} from "../store/users/type";
+import { UserAPI } from "../constants/userApi";
 
-export const getDataStore = (): Promise<DataResponse> => {
-  return apiClient.get<DataResponse, any>(storeAPI.getData).then((response) => {
+export const getDataUser = (): Promise<DataResponse> => {
+  return apiClient.get<DataResponse, any>(UserAPI.getData).then((response) => {
     const responseData = response.data;
     return responseData;
   });
 };
 
-export const createDataStore = (formData: any): Promise<DataResponseCreate> => {
+export const createDataUser = (formData: any): Promise<DataResponseCreate> => {
   return apiClient
-    .post<DataResponseCreate>(`${storeAPI.createData}`, formData, {
+    .post<DataResponseCreate>(`${UserAPI.createDataStoreAdmin}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -26,22 +26,22 @@ export const createDataStore = (formData: any): Promise<DataResponseCreate> => {
     });
 };
 
-export const updateData = (
+export const updateDataUser = (
   data: any,
   id: string
 ): Promise<DataResponseCreate> =>
   apiClient
-    .put<DataResponseCreate, any>(`${storeAPI.updateData}/${id}`, data, {
+    .put<DataResponseCreate, any>(`${UserAPI.updateData}/${id}`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
     .then((response) => response);
 
-export const deleteData = async (id: string): Promise<DataResponseById> => {
+export const deleteDataUser = async (id: string): Promise<DataResponseById> => {
   console.log("id", id);
   const response = await apiClient.delete<DataResponseById>(
-    `${storeAPI.deleteData}/${id}`
+    `${UserAPI.deleteData}/${id}`
   );
 
   const responseData = response.data;

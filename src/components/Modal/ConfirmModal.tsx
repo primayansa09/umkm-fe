@@ -61,7 +61,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         sx: {
           borderRadius: 2,
           boxShadow: "none", // hilangkan shadow hitam
-          width: 400,
+          width: 500,
         },
       }}
     >

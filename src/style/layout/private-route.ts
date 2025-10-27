@@ -2,9 +2,9 @@ import { SxProps, Theme } from "@mui/material";
 
 import { SxStyle } from "../../types/style";
 
-const sideMenuIcon: SxStyle = { fontSize: "18px", color: "white" };
+const sideMenuIcon: SxStyle = { fontSize: "18px"};
 
-const sideSubMenuIcon: SxStyle = { fontSize: "18px", color: "black" };
+const sideSubMenuIcon: SxStyle = { fontSize: "18px"};
 
 const sideMenuIconCollapse: SxStyle = {
   fontSize: { xs: "14px", sm: "18px" },
@@ -27,7 +27,7 @@ const manageTableContainer: SxStyle = {
 
 const moduleTableHead: SxStyle = {
   "& th": {
-    backgroundColor: "#f0f0f0a4",
+    backgroundColor: "rgba(111, 111, 111, 0.01)",
     padding: "16px ",
   },
 };
@@ -91,7 +91,7 @@ const buttonAdd = {
 const buttonSubmit = {
   background: "#FEA405",
   fontSize: 12,
-  width: 150,
+  width: 100,
   color: "white",
   border: "none",
   padding: "10px",
@@ -102,9 +102,9 @@ const buttonSubmit = {
 };
 
 const buttonCancel = {
-  background: "#FD1C1C",
+  background: "#ff0303ff",
   fontSize: 12,
-  width: 150,
+  width: 100,
   color: "white",
   border: "none",
   padding: "10px",
@@ -214,7 +214,7 @@ const backgroundGeneral: SxProps<Theme> = {
 };
 
 const drawerIcon: SxProps<Theme> = {
-  color: "black",
+  // color: "black",
   width: "35px",
   height: "35px",
 };

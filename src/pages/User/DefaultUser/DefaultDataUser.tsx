@@ -13,13 +13,13 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import Pagination from "@mui/material/Pagination";
 import { layoutPrivateStyle } from "../../../style/layout/private-route";
-import { Data } from "../../../store/store/type";
+import { Data } from "../../../store/users/type";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
-import { getDataStore, deleteData } from "../../../api/dataStore";
+import { getDataUser, deleteDataUser } from "../../../api/dataUsers";
 import TableComponent from "../../../components/Table/TableComponent";
 import SearchField from "../../../components/SearchComponent/SearchComponent";
 
-export function DefaultDataStore() {
+export function DefaultDataUser() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -34,19 +34,10 @@ export function DefaultDataStore() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      //    const filter: DataFilter = {
-      //   filter: {
-      //     name: searchData || "",
-      //   },
-      //   sortBy: null,
-      //   order: null,
-      //   pageSize: rowsPerPage,
-      //   pageNumber: page + 1,
-      // };
 
-      const response = await getDataStore();
+      const response = await getDataUser();
       setDataBind(response.data || []);
-      // setFilteredData(response.data || []);
+      console.log("data", response.data);
       await new Promise((resolve) => setTimeout(resolve, 500));
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -73,12 +64,12 @@ export function DefaultDataStore() {
     setPage(0);
   };
 
-  const handleManageStore = () => {
-    navigate("/manage-store", { replace: true });
+  const handleManageUser = () => {
+    navigate("/manage-user", { replace: true });
   };
 
   const clickEditData = (item: Data) => {
-    navigate("/manage-store", {
+    navigate("/manage-user", {
       state: {
         itemData: item,
         mode: "Edit",
@@ -92,17 +83,17 @@ export function DefaultDataStore() {
     setOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      const response = await deleteData(id);
-      console.log("Data berhasil dihapus:", response);
+    const handleDelete = async (id: string) => {
+      try {
+        const response = await deleteDataUser(id);
+        console.log("Data berhasil dihapus:", response);
 
-      setOpen(false);
-      fetchData();
-    } catch (error) {
-      console.error("Gagal menghapus data:", error);
-    }
-  };
+        setOpen(false);
+        fetchData();
+      } catch (error) {
+        console.error("Gagal menghapus data:", error);
+      }
+    };
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -123,31 +114,31 @@ export function DefaultDataStore() {
 
   const TableColumn = [
     { field: "name", headerName: "Toko", align: "center" as const },
-    { field: "address", headerName: "Alamat", align: "center" as const },
+    { field: "email", headerName: "Email", align: "center" as const },
     { field: "phone", headerName: "Telepon", align: "center" as const },
     {
-      field: "is_active",
-      headerName: "Status",
-      align: "center" as const,
-      render: (row: any) => (
-        <Typography
-          sx={{
-            backgroundColor: row.is_active
-              ? "rgba(0, 128, 0, 0.1)"
-              : "rgba(255, 0, 0, 0.1)",
-            color: row.is_active ? "green" : "red",
-            borderRadius: "8px",
-            px: 1,
-            py: 0.5,
-            padding: "4px 12px",
-            fontSize: "0.9rem",
-            display: "inline-block",
-          }}
-        >
-          {row.is_active ? "Aktif" : "Tidak Aktif"}
-        </Typography>
-      ),
-    },
+          field: "is_active",
+          headerName: "Status",
+          align: "center" as const,
+          render: (row: any) => (
+            <Typography
+              sx={{
+                backgroundColor: row.is_active
+                  ? "rgba(0, 128, 0, 0.1)"
+                  : "rgba(255, 0, 0, 0.1)",
+                color: row.is_active ? "green" : "red",
+                borderRadius: "8px",
+                px: 1,
+                py: 0.5,
+                padding: "4px 12px",
+                fontSize: "0.9rem",
+                display: "inline-block",
+              }}
+            >
+              {row.is_active ? "Aktif" : "Tidak Aktif"}
+            </Typography>
+          ),
+        },
   ];
 
   return (
@@ -162,16 +153,16 @@ export function DefaultDataStore() {
           <InputLabel
             sx={{ ...layoutPrivateStyle.manageTitleHeader, marginTop: 5 }}
           >
-            Data Toko
+            Data User
           </InputLabel>
         </Grid>
         <Grid size={1}>
           <Button
             variant="contained"
             sx={{ ...layoutPrivateStyle.buttonAdd, marginTop: 5 }}
-            onClick={handleManageStore}
+            onClick={handleManageUser}
           >
-            <AddIcon /> Tambah Toko
+            <AddIcon /> Tambah User
           </Button>
         </Grid>
       </Grid>
@@ -184,9 +175,9 @@ export function DefaultDataStore() {
           marginBottom={1}
         >
           <SearchField
+            placeholder="Search user"
             value={searchData}
             onChange={(value) => setSearchData(value)}
-            placeholder="Search toko"
             sx={layoutPrivateStyle.search}
           />
         </Grid>
