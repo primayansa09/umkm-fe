@@ -6,7 +6,6 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
-  Grid,
   Toolbar,
   Box,
   IconButton,
@@ -93,9 +92,15 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+  const handleDrawerOpen = () => setOpen(true);
+  const handleDrawerClose = () => setOpen(false);
   const [openCollapse, setOpenCollapse] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -114,14 +119,6 @@ const Sidebar: React.FC = () => {
     localStorage.removeItem("dataLogin");
     navigate("/login");
     handleClose();
-  };
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
   };
 
   const handleParentClick = (item: ListItem) => {

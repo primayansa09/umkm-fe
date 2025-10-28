@@ -121,7 +121,7 @@ export function ManageServiceItem() {
   }, [IsEdit, itemData, mode]);
 
   const clickCancel = () => {
-    navigate("/master-data/data-user", { replace: true });
+    navigate("/service-item", { replace: true });
   };
 
   return (
