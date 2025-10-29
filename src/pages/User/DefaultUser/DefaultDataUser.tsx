@@ -113,7 +113,7 @@ export function DefaultDataUser() {
   }, [searchData, dataBind]);
 
   const TableColumn = [
-    { field: "name", headerName: "Toko", align: "center" as const },
+    { field: "name", headerName: "Nama", align: "center" as const },
     { field: "email", headerName: "Email", align: "center" as const },
     { field: "phone", headerName: "Telepon", align: "center" as const },
     {

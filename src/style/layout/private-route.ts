@@ -173,8 +173,8 @@ const headerDivider: SxProps<Theme> = {
 };
 
 const headerTypography: SxProps<Theme> = {
-  fontSize: "14px",
-  textTransform: "uppercase",
+  fontSize: "16px",
+  // textTransform: "uppercase",
   color: "black",
 };
 

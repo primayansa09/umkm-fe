@@ -43,12 +43,12 @@ export function ManageUser() {
   });
 
   const [errors, setErrors] = useState({
-    nameStore: false,
+    nameUser: false,
     phone: false,
   });
 
   const handleSubmit = async () => {
-    setErrors({ nameStore: false, phone: false });
+    setErrors({ nameUser: false, phone: false });
 
     const result = storeSchema.safeParse(formDataUser);
 
@@ -152,9 +152,9 @@ export function ManageUser() {
               variant="outlined"
               size="small"
               value={formDataUser.name}
-              error={errors.nameStore}
+              error={errors.nameUser}
               helperText={
-                errors.nameStore ? "Nama toko tidak boleh kosong" : ""
+                errors.nameUser ? "Nama toko tidak boleh kosong" : ""
               }
               onChange={(e) =>
                 setFormDataUser({

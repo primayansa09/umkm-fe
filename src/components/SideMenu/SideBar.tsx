@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Drawer,
   List,
@@ -106,6 +106,20 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
   const navigate = useNavigate();
   const [profileMenu, setProfileMenu] = useState(false);
   const userName = useSelector((state: RootState) => state.auth.user?.name);
+  const [greeting, setGreeting] = useState("");
+  const hour = new Date().getHours();
+
+  let getGreeting = "";
+
+  if(hour >= 5 && hour < 11){
+    getGreeting = "Selamat Pagi";
+  }else if(hour >= 11 && hour < 15){
+    getGreeting = "Selamat Siang";
+  }else if(hour >= 15 && hour < 18){
+    getGreeting = "Selamat Sore";
+  }else{
+    getGreeting = "Selamat Malam";
+  }
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setProfileMenu(true);
@@ -132,6 +146,16 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
   const handleChildClick = (link: string) => {
     navigate(link);
   };
+
+  useEffect(() => {
+    setGreeting(getGreeting);
+
+    const interval = setInterval(() => {
+      setGreeting(getGreeting);
+    }, 60000)
+
+    return () => clearInterval(interval);
+  })
 
   return (
     <>
@@ -179,7 +203,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
             <Box sx={{ flexGrow: 1 }} />
             <Stack direction="row" alignItems="center" gap="16px">
               <Typography sx={layoutPrivateStyle.headerTypography}>
-                Welcome, {userName || ""}
+                {greeting}, {userName || ""}
               </Typography>
               <Avatar
                 src="/static/images/avatar/2.jpg"

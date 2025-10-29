@@ -133,22 +133,46 @@ export function ManageStore() {
         Master Data Store
       </InputLabel>
       <Paper style={{ padding: 16 }}>
-        <Grid container spacing={2} alignItems={"center"} marginTop={2}>
-          <Grid size={2}>
-            <InputLabel
-              sx={{
-                ...layoutPrivateStyle.manageSubTitle,
-                marginLeft: "15px",
-              }}
-            >
-              Nama Toko
-            </InputLabel>
-          </Grid>
-          <Grid size={9}>
+        <Grid container size={1} direction="column" justifyContent="flex-end" alignItems="flex-end">
+          <InputLabel
+            sx={{
+              ...layoutPrivateStyle.manageSubTitle,
+              marginRight: "9px",
+            }}
+          >
+            Status
+          </InputLabel>
+          <Switch
+            {...label}
+            defaultChecked
+            color="warning"
+            checked={formDataStore.is_active}
+            onChange={(e) =>
+              setFormDataStore({
+                ...formDataStore,
+                is_active: e.target.checked,
+              })
+            }
+          />
+        </Grid>
+        <Grid
+          container
+          style={{ marginTop: "5px" }}
+          justifyContent="space-between"
+        >
+          <Grid direction="column" container size={5.9}>
+            <Grid>
+              <InputLabel
+                sx={{
+                  ...layoutPrivateStyle.manageSubTitle,
+                }}
+              >
+                Nama Toko
+              </InputLabel>
+            </Grid>
             <TextField
               id="outlined-basic"
               variant="outlined"
-              sx={{ width: "250px" }}
               size="small"
               value={formDataStore.name}
               error={errors.nameStore}
@@ -163,51 +187,23 @@ export function ManageStore() {
               }
             />
           </Grid>
-          <Grid size={1}>
-            <InputLabel
-              sx={{
-                ...layoutPrivateStyle.manageSubTitle,
-                marginLeft: "9px",
-              }}
-            >
-              Status
-            </InputLabel>
-            <Switch
-              {...label}
-              defaultChecked
-              color="warning"
-              checked={formDataStore.is_active}
-              onChange={(e) =>
-                setFormDataStore({
-                  ...formDataStore,
-                  is_active: e.target.checked,
-                })
-              }
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={2} alignItems={"center"} marginTop={2}>
-          <Grid size={2}>
-            <InputLabel
-              sx={{
-                ...layoutPrivateStyle.manageSubTitle,
-                marginLeft: "15px",
-              }}
-            >
-              No Tlp/Handphone
-              {/* <span style={{ color: "red" }}>*</span> */}
-            </InputLabel>
-          </Grid>
-          <Grid size={4}>
+          <Grid direction="column" container size={6}>
+            <Grid>
+              <InputLabel
+                sx={{
+                  ...layoutPrivateStyle.manageSubTitle,
+                }}
+              >
+                No Tlp/Handphone
+                {/* <span style={{ color: "red" }}>*</span> */}
+              </InputLabel>
+            </Grid>
             <TextField
               id="outlined-basic"
               variant="outlined"
-              sx={{ width: "250px" }}
               size="small"
               value={formDataStore.phone}
-              helperText={
-                errors.phone ? "Nomor HP harus 10–13 digit" : ""
-              }
+              helperText={errors.phone ? "Nomor HP harus 10–13 digit" : ""}
               FormHelperTextProps={{
                 sx: { color: "red" },
               }}
@@ -234,19 +230,16 @@ export function ManageStore() {
               }}
             />
           </Grid>
-        </Grid>
-        <Grid container spacing={2} alignItems={"center"} marginTop={2}>
-          <Grid size={2}>
-            <InputLabel
-              sx={{
-                ...layoutPrivateStyle.manageSubTitle,
-                marginLeft: "15px",
-              }}
-            >
-              Alamat Toko
-            </InputLabel>
-          </Grid>
-          <Grid size={4}>
+          <Grid direction="column" container size={6} marginTop={1}>
+            <Grid>
+              <InputLabel
+                sx={{
+                  ...layoutPrivateStyle.manageSubTitle,
+                }}
+              >
+                Alamat Toko
+              </InputLabel>
+            </Grid>
             <TextField
               id="outlined-basic"
               variant="outlined"
