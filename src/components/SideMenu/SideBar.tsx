@@ -164,7 +164,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
         <AppBar
           position="fixed"
           open={open}
-          style={{ backgroundColor: "#FFFFFF", boxShadow: "inherit" }}
+          sx={{ backgroundColor: "#FFFFFF", boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.25)", }}
         >
           <Toolbar>
             <IconButton
