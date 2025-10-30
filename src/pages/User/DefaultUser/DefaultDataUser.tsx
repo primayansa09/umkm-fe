@@ -26,8 +26,9 @@ export function DefaultDataUser() {
   const [searchData, setSearchData] = useState("");
   const [filteredData, setFilteredData] = useState<any[]>();
 
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [totalData, setTotalData] = useState(0);
   const [dataBind, setDataBind] = useState<Data[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +36,10 @@ export function DefaultDataUser() {
     try {
       setLoading(true);
 
-      const response = await getDataUser();
+      const response = await getDataUser({
+        pageNumber: page,
+        pageSize: rowsPerPage,
+      });
       setDataBind(response.data || []);
       console.log("data", response.data);
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -51,7 +55,7 @@ export function DefaultDataUser() {
   }, []);
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    event: React.ChangeEvent<unknown>,
     newPage: number
   ) => {
     setPage(newPage);
@@ -83,17 +87,17 @@ export function DefaultDataUser() {
     setOpen(true);
   };
 
-    const handleDelete = async (id: string) => {
-      try {
-        const response = await deleteDataUser(id);
-        console.log("Data berhasil dihapus:", response);
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await deleteDataUser(id);
+      console.log("Data berhasil dihapus:", response);
 
-        setOpen(false);
-        fetchData();
-      } catch (error) {
-        console.error("Gagal menghapus data:", error);
-      }
-    };
+      setOpen(false);
+      fetchData();
+    } catch (error) {
+      console.error("Gagal menghapus data:", error);
+    }
+  };
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -117,28 +121,28 @@ export function DefaultDataUser() {
     { field: "email", headerName: "Email", align: "center" as const },
     { field: "phone", headerName: "Telepon", align: "center" as const },
     {
-          field: "is_active",
-          headerName: "Status",
-          align: "center" as const,
-          render: (row: any) => (
-            <Typography
-              sx={{
-                backgroundColor: row.is_active
-                  ? "rgba(0, 128, 0, 0.1)"
-                  : "rgba(255, 0, 0, 0.1)",
-                color: row.is_active ? "green" : "red",
-                borderRadius: "8px",
-                px: 1,
-                py: 0.5,
-                padding: "4px 12px",
-                fontSize: "0.9rem",
-                display: "inline-block",
-              }}
-            >
-              {row.is_active ? "Aktif" : "Tidak Aktif"}
-            </Typography>
-          ),
-        },
+      field: "is_active",
+      headerName: "Status",
+      align: "center" as const,
+      render: (row: any) => (
+        <Typography
+          sx={{
+            backgroundColor: row.is_active
+              ? "rgba(0, 128, 0, 0.1)"
+              : "rgba(255, 0, 0, 0.1)",
+            color: row.is_active ? "green" : "red",
+            borderRadius: "8px",
+            px: 1,
+            py: 0.5,
+            padding: "4px 12px",
+            fontSize: "0.9rem",
+            display: "inline-block",
+          }}
+        >
+          {row.is_active ? "Aktif" : "Tidak Aktif"}
+        </Typography>
+      ),
+    },
   ];
 
   return (
@@ -208,7 +212,14 @@ export function DefaultDataUser() {
           message={`Apakah Anda yakin ingin menghapus data ini ?`}
         />
         <Box display="center" justifyContent="center" marginBottom={2}>
-          <Pagination count={10} variant="outlined" shape="rounded" />
+          <Pagination
+            count={Math.max(1, Math.ceil(totalData / rowsPerPage))}
+            page={page}
+            onChange={handleChangePage}
+            variant="outlined"
+            shape="rounded"
+            sx={layoutPrivateStyle.paginationTheme}
+          />
         </Box>
       </Paper>
     </Stack>

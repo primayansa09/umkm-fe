@@ -25,14 +25,17 @@ export function ManageUser() {
   const location = useLocation();
   const { itemData, mode, IsEdit } = location.state || {};
 
-  const [dataEdit, setDataEdit] = useState<{ id: string; mode: string }>({
+  const [isEdit, setIsEdit] = useState<{ id: string; mode: string }>({
     id: itemData?.id || "",
     mode: mode || "",
   });
 
+  console.log("isEdit:", isEdit);
+
   const [openModal, setOpenModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalContent, setModalContent] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const [formDataUser, setFormDataUser] = useState<DataInsert>({
     name: "",
@@ -69,9 +72,9 @@ export function ManageUser() {
     };
 
     try {
-      if (dataEdit.mode === "Edit") {
+      if (isEdit.mode === "Edit") {
         //MODE EDIT
-        const response = await updateDataUser(dataJson, dataEdit.id);
+        const response = await updateDataUser(dataJson, isEdit.id);
 
         if (response.status === 200) {
           setModalTitle("Success");
@@ -112,7 +115,7 @@ export function ManageUser() {
   useEffect(() => {
     if (IsEdit && itemData) {
       setFormDataUser(itemData);
-      setDataEdit({
+      setIsEdit({
         id: itemData.id,
         mode: mode || "Edit",
       });
@@ -121,6 +124,22 @@ export function ManageUser() {
 
   const clickCancel = () => {
     navigate("/master-data/data-user", { replace: true });
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFormDataUser({ ...formDataUser, password: value });
+
+    // Regex validasi:
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+    if (!regex.test(value)) {
+      setPasswordError(
+        "Password harus minimal 8 karakter, mengandung huruf besar, angka, dan simbol (!@#$%^& dll)."
+      );
+    } else {
+      setPasswordError("");
+    }
   };
 
   return (
@@ -153,9 +172,7 @@ export function ManageUser() {
               size="small"
               value={formDataUser.name}
               error={errors.nameUser}
-              helperText={
-                errors.nameUser ? "Nama toko tidak boleh kosong" : ""
-              }
+              helperText={errors.nameUser ? "Nama toko tidak boleh kosong" : ""}
               onChange={(e) =>
                 setFormDataUser({
                   ...formDataUser,
@@ -232,6 +249,30 @@ export function ManageUser() {
               }}
             />
           </Grid>
+          {isEdit?.mode !== "Edit" && (
+            <Grid direction="column" container size={6}>
+              <Grid>
+                <InputLabel
+                  sx={{
+                    ...layoutPrivateStyle.manageSubTitle,
+                    marginTop: 1,
+                  }}
+                >
+                  Password
+                  <span style={{ color: "red" }}>*</span>
+                </InputLabel>
+              </Grid>
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                size="small"
+                value={formDataUser.password}
+                onChange={handlePasswordChange}
+                error={!!passwordError}
+                helperText={passwordError}
+              />
+            </Grid>
+          )}
         </Grid>
         <Grid
           container

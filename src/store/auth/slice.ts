@@ -22,6 +22,9 @@ const initialState: AuthState = {
         id: parsedUser.id,
         role: parsedUser.role,
         is_active: true,
+        deleted_at: parsedUser.deleted_at,
+        created_at: parsedUser.created_at,
+        updated_at: parsedUser.updated_at
       }
     : null,
   loading: false,
@@ -42,7 +45,10 @@ export const login = createAsyncThunk(
       });
       return response.data; // { data: { token, user }, message, status }
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response?.data || "Login failed");
+      const message =
+        error.response?.data?.message ||
+        "Login gagal, periksa kembali email atau password.";
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );
@@ -78,7 +84,10 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error =
+          typeof action.payload === "string"
+            ? action.payload
+            : "Login gagal, terjadi kesalahan server.";
       });
   },
 });

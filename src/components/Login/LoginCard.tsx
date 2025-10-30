@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Paper,
   Typography,
@@ -6,8 +6,11 @@ import {
   TextField,
   Button,
   CircularProgress,
+  IconButton,
+  InputAdornment
 } from "@mui/material";
 import { layoutPrivateStyle } from "../../style/layout/private-route";
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 
 interface LoginCardProps {
   email: string;
@@ -30,6 +33,12 @@ const LoginCard: React.FC<LoginCardProps> = ({
   onPasswordChange,
   onSubmit,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <Paper
       elevation={2}
@@ -71,13 +80,22 @@ const LoginCard: React.FC<LoginCardProps> = ({
           <TextField
             label="Password"
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => onPasswordChange(e.target.value)}
             fullWidth
             size="small"
             error={Boolean(errors.password)}
             helperText={errors.password}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility/>}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
         </Grid>
 

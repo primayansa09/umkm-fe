@@ -26,8 +26,9 @@ export function DefaultDataStore() {
   const [searchData, setSearchData] = useState("");
   const [filteredData, setFilteredData] = useState<any[]>();
 
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [totalData, setTotalData] = useState(0);
   const [dataBind, setDataBind] = useState<Data[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -44,7 +45,10 @@ export function DefaultDataStore() {
       //   pageNumber: page + 1,
       // };
 
-      const response = await getDataStore();
+      const response = await getDataStore({
+        pageNumber: page,
+        pageSize: rowsPerPage,
+      });
       setDataBind(response.data || []);
       // setFilteredData(response.data || []);
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -57,10 +61,10 @@ export function DefaultDataStore() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page, rowsPerPage]);
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    event: React.ChangeEvent<unknown>,
     newPage: number
   ) => {
     setPage(newPage);
@@ -217,7 +221,14 @@ export function DefaultDataStore() {
           message={`Apakah Anda yakin ingin menghapus data ini ?`}
         />
         <Box display="center" justifyContent="center" marginBottom={2}>
-          <Pagination count={10} variant="outlined" shape="rounded" />
+          <Pagination
+            count={Math.max(1, Math.ceil(totalData / rowsPerPage))}
+            page={page}
+            onChange={handleChangePage}
+            variant="outlined"
+            shape="rounded"
+            sx={layoutPrivateStyle.paginationTheme}
+          />
         </Box>
       </Paper>
     </Stack>

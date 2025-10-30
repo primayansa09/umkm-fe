@@ -102,7 +102,7 @@ const buttonSubmit = {
 };
 
 const buttonCancel = {
-  background: "#ff0303ff",
+  background: "#E62727",
   fontSize: 12,
   width: 100,
   color: "white",
@@ -243,6 +243,20 @@ const backgroundCard: SxProps<Theme> = {
   borderRadius: 3,
 };
 
+const paginationTheme: SxStyle = {
+  mt: 2,
+    display: "flex",
+    justifyContent: "center",
+    "& .MuiPaginationItem-root.Mui-selected": {
+      backgroundColor: "#FFA500",
+      color: "white",
+      borderColor: "#FEA405",
+      "&:hover": {
+        backgroundColor: "#FF8C00",
+      },
+    }  
+  }
+
 export const layoutPrivateStyle = {
   backgroundColor,
   backgroundGeneral,
@@ -275,4 +289,5 @@ export const layoutPrivateStyle = {
   headerTypography,
   headerAvatar,
   search,
+  paginationTheme
 };

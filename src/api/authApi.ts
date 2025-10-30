@@ -16,6 +16,9 @@ export interface LoginResponse {
       phone?: string;
       role: string;
       is_active: boolean;
+      deleted_at: string;
+      created_at: string;
+      updated_at: string;
     };
   };
   message: string;

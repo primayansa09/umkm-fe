@@ -6,8 +6,18 @@ import {
 } from "../store/users/type";
 import { UserAPI } from "../constants/userApi";
 
-export const getDataUser = (): Promise<DataResponse> => {
-  return apiClient.get<DataResponse, any>(UserAPI.getData).then((response) => {
+interface StoreParams {
+  pageNumber?: number;
+  pageSize?: number;
+}
+
+export const getDataUser = (params?: StoreParams): Promise<DataResponse> => {
+  return apiClient.get<DataResponse, any>(UserAPI.getData, {
+    params: {
+      page: params?.pageNumber ?? 1,
+      page_size: params?.pageSize ?? 10
+    }
+  }).then((response) => {
     const responseData = response.data;
     return responseData;
   });
