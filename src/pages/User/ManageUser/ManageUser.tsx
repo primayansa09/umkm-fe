@@ -69,13 +69,14 @@ export function ManageUser() {
       email: formDataUser.email,
       address: formDataUser.address,
       Phone: formDataUser.phone,
+      password: formDataUser.password
     };
 
     try {
       if (isEdit.mode === "Edit") {
         //MODE EDIT
         const response = await updateDataUser(dataJson, isEdit.id);
-
+        
         if (response.status === 200) {
           setModalTitle("Success");
           setModalContent(response.message || "Data user berhasil diperbarui");
@@ -129,6 +130,7 @@ export function ManageUser() {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFormDataUser({ ...formDataUser, password: value });
+    console.log("password", value)
 
     // Regex validasi:
     const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
